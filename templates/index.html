@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Travel Booking Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Travel Booking Portal 🚆✈️🚌</h1>
+        <p>Select your mode of transport to book tickets:</p>
+
+        <div class="category-grid">
+            <a href="/book/train" class="card train">
+                <h2>🚆 Train Booking</h2>
+                <p>Book Express & High-Speed Trains</p>
+            </a>
+
+            <a href="/book/flight" class="card flight">
+                <h2>✈️ Flight Booking</h2>
+                <p>Book Domestic & International Flights</p>
+            </a>
+
+            <a href="/book/bus" class="card bus">
+                <h2>🚌 Bus Booking</h2>
+                <p>Book AC & Non-AC Luxury Buses</p>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
