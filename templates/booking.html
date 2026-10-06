@@ -3,44 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book {{ category }} Ticket</title>
+    <title>Book Ticket - Travel Portal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar">
+        <h2><i class="fa-solid fa-plane-departure"></i> Travel Portal</h2>
+        <div>
+            <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="/my-bookings"><i class="fa-solid fa-ticket"></i> My Bookings</a>
+            <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </nav>
 
-    <div class="container">
-        <h1>Book Your {{ category }} Ticket</h1>
+    <div class="container" style="max-width: 500px; margin-top: 40px;">
+        <h2><i class="fa-solid fa-ticket"></i> Book Your Ticket</h2>
+        <p style="color: #666; margin-bottom: 20px;">Enter your travel details below</p>
 
-        {% if success %}
-            <div class="success-card">
-                <h2>🎉 Booking Confirmed!</h2>
-                <p><strong>Passenger Name:</strong> {{ success.name }}</p>
-                <p><strong>Transport Type:</strong> {{ success.category }}</p>
-                <p><strong>Selected Route:</strong> {{ success.option }}</p>
-                <p><strong>Travel Date:</strong> {{ success.date }}</p>
-                <a href="/" class="btn-back">Book Another Ticket</a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('book') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Passenger Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter passenger name" required>
             </div>
-        {% else %}
-            <form method="POST">
-                <label>Full Name:</label>
-                <input type="text" name="passenger_name" placeholder="Enter Passenger Name" required>
 
-                <label>Select {{ category }} Service:</label>
-                <select name="selected_option" required>
-                    {% for option in options %}
-                        <option value="{{ option }}">{{ option }}</option>
-                    {% endfor %}
+            <div class="form-group">
+                <label for="mode">Mode of Travel</label>
+                <select id="mode" name="mode" required>
+                    <option value="Train">Train</option>
+                    <option value="Flight">Flight</option>
+                    <option value="Bus">Bus</option>
                 </select>
+            </div>
 
-                <label>Date of Journey:</label>
-                <input type="date" name="booking_date" required>
+            <div class="form-group">
+                <label for="from">From (Source)</label>
+                <input type="text" id="from" name="from" placeholder="Enter departure city" required>
+            </div>
 
-                <button type="submit">Confirm & Pay</button>
-            </form>
-            <br>
-            <a href="/" class="btn-link">⬅ Back to Home</a>
-        {% endif %}
+            <div class="form-group">
+                <label for="to">To (Destination)</label>
+                <input type="text" id="to" name="to" placeholder="Enter destination city" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Travel Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">
+                <i class="fa-solid fa-check"></i> Confirm & Book Ticket
+            </button>
+        </form>
     </div>
-
 </body>
 </html>

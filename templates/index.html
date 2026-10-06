@@ -3,32 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Travel Booking Portal</title>
+    <title>Travel Booking Portal - Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar">
+        <h2><i class="fa-solid fa-plane-departure"></i> Travel Portal</h2>
+        <div>
+            {% if session.get('username') %}
+                <a href="/my-bookings"><i class="fa-solid fa-ticket"></i> My Bookings</a>
+                <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            {% else %}
+                <a href="/login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                <a href="/register"><i class="fa-solid fa-user-plus"></i> Register</a>
+            {% endif %}
+        </div>
+    </nav>
 
-    <div class="container">
-        <h1>Travel Booking Portal 🚆✈️🚌</h1>
-        <p>Select your mode of transport to book tickets:</p>
+    <div class="container" style="max-width: 800px; text-align: center; margin-top: 50px;">
+        <h1>Welcome to Travel Booking Portal</h1>
+        <p style="color: #666; margin-top: 10px; margin-bottom: 30px;">
+            Book your Bus, Train, and Flight tickets quickly and easily.
+        </p>
 
-        <div class="category-grid">
-            <a href="/book/train" class="card train">
-                <h2>🚆 Train Booking</h2>
-                <p>Book Express & High-Speed Trains</p>
-            </a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-            <a href="/book/flight" class="card flight">
-                <h2>✈️ Flight Booking</h2>
-                <p>Book Domestic & International Flights</p>
-            </a>
+        <div style="display: flex; justify-content: space-around; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+            <!-- Train Booking Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 25px; width: 220px;">
+                <i class="fa-solid fa-train" style="font-size: 40px; color: #007bff; margin-bottom: 15px;"></i>
+                <h3>Train Tickets</h3>
+                <p style="color: #666; font-size: 14px; margin: 10px 0 20px 0;">Fast & comfortable rail journey.</p>
+                <a href="/book" class="btn">Book Train</a>
+            </div>
 
-            <a href="/book/bus" class="card bus">
-                <h2>🚌 Bus Booking</h2>
-                <p>Book AC & Non-AC Luxury Buses</p>
-            </a>
+            <!-- Flight Booking Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 25px; width: 220px;">
+                <i class="fa-solid fa-plane" style="font-size: 40px; color: #17a2b8; margin-bottom: 15px;"></i>
+                <h3>Flight Tickets</h3>
+                <p style="color: #666; font-size: 14px; margin: 10px 0 20px 0;">Fly anywhere with best offers.</p>
+                <a href="/book" class="btn">Book Flight</a>
+            </div>
+
+            <!-- Bus Booking Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 25px; width: 220px;">
+                <i class="fa-solid fa-bus" style="font-size: 40px; color: #28a745; margin-bottom: 15px;"></i>
+                <h3>Bus Tickets</h3>
+                <p style="color: #666; font-size: 14px; margin: 10px 0 20px 0;">Affordable intercity rides.</p>
+                <a href="/book" class="btn">Book Bus</a>
+            </div>
         </div>
     </div>
-
 </body>
 </html>

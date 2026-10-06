@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login - Travel Booking Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <h2><i class="fa-solid fa-plane-departure"></i> Travel Portal</h2>
+        <div>
+            <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="/register"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 420px; margin-top: 60px;">
+        <h2><i class="fa-solid fa-right-to-bracket"></i> Welcome Back</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 25px;">Please log in to your account</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-lock"></i> Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn" style="margin-top: 10px;">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Log In
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 25px; color: #555;">
+            Don't have an account? <a href="/register" style="color: #007bff; font-weight: bold; text-decoration: none;">Register Here</a>
+        </p>
+    </div>
+</body>
+</html>

@@ -1,37 +1,106 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
+# Secret key is required for session management and flash messages
+app.secret_key = 'super_secret_travel_key_123'
 
-# Sample Data for Booking Options
-TRANSPORT_OPTIONS = {
-    'train': ['Express Express - $50', 'Superfast Express - $80', 'Bullet Train - $120'],
-    'flight': ['Economy Flight - $200', 'Business Flight - $500', 'First Class Flight - $900'],
-    'bus': ['AC Sleeper Bus - $30', 'Volvo Seater Bus - $25', 'Express Bus - $15']
-}
+# Temporary in-memory storage for registered users (username: password)
+users = {}
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/book/<category>', methods=['GET', 'POST'])
-def book_ticket(category):
-    category_name = category.capitalize()
-    options = TRANSPORT_OPTIONS.get(category.lower(), [])
-    booking_success = None
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if not username or not password:
+            flash('Please fill in all fields.', 'danger')
+            return redirect(url_for('register'))
+
+        if username in users:
+            flash('Username already exists! Please choose another.', 'danger')
+            return redirect(url_for('register'))
+            
+        users[username] = password
+        flash('Registration successful! Please log in.', 'success')
+        return redirect(url_for('login'))
+        
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username in users and users[username] == password:
+            session['user'] = username
+            flash('Successfully logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password.', 'danger')
+            return redirect(url_for('login'))
+            
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    flash('Logged out successfully.', 'info')
+    return redirect(url_for('home'))
+
+@app.route('/book', methods=['GET', 'POST'])
+def book():
+    if 'user' not in session:
+        flash('Please log in to book a ticket.', 'warning')
+        return redirect(url_for('login'))
     
     if request.method == 'POST':
-        passenger_name = request.form.get('passenger_name')
-        selected_option = request.form.get('selected_option')
-        booking_date = request.form.get('booking_date')
+        passenger_name = request.form.get('name')
+        travel_mode = request.form.get('mode')
+        from_loc = request.form.get('from')
+        to_loc = request.form.get('to')
+        date = request.form.get('date')
         
-        booking_success = {
-            'name': passenger_name,
-            'category': category_name,
-            'option': selected_option,
-            'date': booking_date
-        }
+        # Validating input
+        if not all([passenger_name, travel_mode, from_loc, to_loc, date]):
+            flash('Please fill in all fields before submitting.', 'danger')
+            return redirect(url_for('book'))
 
-    return render_template('booking.html', category=category_name, options=options, success=booking_success)
+        booking = {
+            'name': passenger_name,
+            'mode': travel_mode,
+            'from': from_loc,
+            'to': to_loc,
+            'date': date,
+            'status': 'Confirmed'
+        }
+        
+        if 'bookings' not in session:
+            session['bookings'] = []
+            
+        # Updating session list properly
+        bookings = session['bookings']
+        bookings.append(booking)
+        session['bookings'] = bookings
+        
+        flash('Ticket booked successfully!', 'success')
+        return redirect(url_for('my_bookings'))
+
+    return render_template('booking.html')
+
+@app.route('/my-bookings')
+def my_bookings():
+    if 'user' not in session:
+        flash('Please log in to view your bookings.', 'warning')
+        return redirect(url_for('login'))
+        
+    user_bookings = session.get('bookings', [])
+    return render_template('my_bookings.html', bookings=user_bookings)
 
 if __name__ == '__main__':
     app.run(debug=True)

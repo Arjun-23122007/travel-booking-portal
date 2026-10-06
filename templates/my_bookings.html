@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Travel Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <h2><i class="fa-solid fa-plane-departure"></i> Travel Portal</h2>
+        <div>
+            <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="/book"><i class="fa-solid fa-plus"></i> Book Ticket</a>
+            <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 800px; margin-top: 40px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> My Booking History</h2>
+            <a href="/book" class="btn" style="width: auto; padding: 10px 20px;">
+                <i class="fa-solid fa-plus"></i> Book New Ticket
+            </a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if bookings %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Passenger</th>
+                        <th>Mode</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td><strong>{{ b.name }}</strong></td>
+                        <td>{{ b.mode }}</td>
+                        <td>{{ b.from }}</td>
+                        <td>{{ b.to }}</td>
+                        <td>{{ b.date }}</td>
+                        <td><span style="color: green; font-weight: bold;">{{ b.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="text-align: center; padding: 40px;">
+                <i class="fa-solid fa-ticket-simple" style="font-size: 50px; color: #cbd5e1; margin-bottom: 15px;"></i>
+                <h3>No Bookings Found</h3>
+                <p style="color: #666; margin-top: 5px;">You haven't booked any tickets yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Travel Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <h2><i class="fa-solid fa-plane-departure"></i> Travel Portal</h2>
+        <div>
+            <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="/my-bookings"><i class="fa-solid fa-ticket"></i> My Bookings</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 550px; text-align: center; margin-top: 50px; padding: 40px;">
+        <div style="background: #d4edda; color: #155724; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; font-size: 40px;">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <h1 style="color: #28a745; margin-bottom: 10px;">Booking Confirmed!</h1>
+        <p style="color: #666; font-size: 16px; margin-bottom: 30px;">Your ticket has been booked successfully.</p>
+
+        <div style="background: #f8f9fa; border: 1px dashed #28a745; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 30px;">
+            <p style="margin-bottom: 12px;"><strong><i class="fa-solid fa-user"></i> Passenger Name:</strong> <span style="float: right;">{{ booking.name }}</span></p>
+            <p style="margin-bottom: 12px;"><strong><i class="fa-solid fa-list"></i> Transport Mode:</strong> <span style="float: right; color: #007bff; font-weight: bold;">{{ booking.mode }}</span></p>
+            <p style="margin-bottom: 12px;"><strong><i class="fa-solid fa-route"></i> Route:</strong> <span style="float: right;">{{ booking.from }} ➔ {{ booking.to }}</span></p>
+            <p style="margin-bottom: 12px;"><strong><i class="fa-solid fa-calendar"></i> Travel Date:</strong> <span style="float: right;">{{ booking.date }}</span></p>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 12px 0;">
+            <p><strong><i class="fa-solid fa-shield-halved"></i> Ticket Status:</strong> <span style="float: right; color: #28a745; font-weight: bold;">CONFIRMED</span></p>
+        </div>
+
+        <a href="/my-bookings" class="btn">
+            <i class="fa-solid fa-ticket"></i> View All My Bookings
+        </a>
+    </div>
+</body>
+</html>
